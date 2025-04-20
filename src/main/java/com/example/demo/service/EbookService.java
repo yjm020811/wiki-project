@@ -6,8 +6,8 @@ import com.example.demo.mapper.EbookMapper;
 import com.example.demo.req.EBookReq;
 import com.example.demo.resp.EBookResp;
 import com.example.demo.resp.PageResp;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,16 +20,13 @@ public class EbookService {
     private EbookMapper ebookMapper;
 
     public PageResp<EBookResp> getEbookList(EBookReq req) {
-        PageHelper.startPage(req.getPage(), req.getSize());
-        List<EBook> eBookList = ebookMapper.getEbookList();
-        // 1. 修复泛型类型
-        List<EBookResp> eBookRespList = CopyUtil.copyList(eBookList, EBookResp.class);
-        // 2. 正确封装分页结果
-        PageInfo<EBook> pageInfo = new PageInfo<>(eBookList);
-        PageResp<EBookResp> pageResp = new PageResp<>();
-        pageResp.setTotal((int) pageInfo.getTotal());
-        pageResp.setList(eBookRespList);
-        return pageResp;
+        Page<Object> page = PageHelper.startPage(req.getPage(), req.getSize());
+        List<EBook> ebooks = ebookMapper.getEbookList();
+        // 手动封装分页响应
+        PageResp<EBookResp> resp = new PageResp<>();
+        resp.setList(CopyUtil.copyList(ebooks, EBookResp.class));
+        resp.setTotal((int) page.getTotal());
+        return resp;
     }
 
 

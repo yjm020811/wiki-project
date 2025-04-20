@@ -3,12 +3,46 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.demo.mapper.UserMapper">
-    <!-- 查询示例 -->
-    <select id="getByName" resultType="com.example.demo.Entity.User">
-        SELECT * FROM users WHERE user_name = #{name}
-    </select>
 
     <select id="getAllUserList" resultType="com.example.demo.Entity.User">
-        SELECT * FROM users
+        SELECT * FROM user
+        <where>
+            <if test="loginName != null">
+                AND loginName LIKE CONCAT('%', #{loginName}, '%')
+            </if>
+            <if test="id != null and id != '' and id != 0">
+                AND id = #{id}
+            </if>
+        </where>
     </select>
+
+    <insert id="addUser" parameterType="com.example.demo.Entity.User">
+        INSERT INTO user (loginName, name)
+        VALUES (#{loginName}, #{name})
+    </insert>
+
+    <update id="editUser" parameterType="com.example.demo.Entity.User">
+        UPDATE user
+        <set>
+            <if test="id != null">
+                id = #{id},
+            </if>
+            <if test="loginName != null and loginName != ''">
+                loginName = #{loginName},
+            </if>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteUser" parameterType="com.example.demo.Entity.User">
+        DELETE FROM user WHERE id = #{id}
+    </delete>
+
+    <select id="getUser" resultType="com.example.demo.Entity.User">
+        SELECT * FROM user WHERE loginName = #{loginName}
+    </select>
+
 </mapper>

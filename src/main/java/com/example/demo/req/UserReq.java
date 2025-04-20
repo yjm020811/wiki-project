@@ -1,21 +1,15 @@
-package com.example.demo.Entity;
+package com.example.demo.req;
 
-import jakarta.validation.constraints.NotNull;
-
-public class User {
+public class UserReq {
     private int id;
-    @NotNull
     private String loginName;
-    @NotNull
-    private String name;
 
-    public User() {
+    public UserReq() {
     }
 
-    public User(int id, String loginName, String name) {
+    public UserReq(int id, String loginName) {
         this.id = id;
         this.loginName = loginName;
-        this.name = name;
     }
 
     public int getId() {
@@ -34,20 +28,11 @@ public class User {
         this.loginName = loginName;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     @Override
     public String toString() {
-        return "User{" +
+        return "UserReq{" +
                 "id=" + id +
                 ", loginName='" + loginName + '\'' +
-                ", name='" + name + '\'' +
                 '}';
     }
 }
